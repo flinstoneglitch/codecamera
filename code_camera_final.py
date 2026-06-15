@@ -13,7 +13,8 @@ st.markdown("<h1 style='color:#00ffff; text-align:center; font-size:2.8em;'>CODE
 
 reader = easyocr.Reader(['en'])
 
-st.subheader("📸 <span style='color:#ff00ff;'>Live Camera</span>", unsafe_allow_html=True)
+# Live Camera with hot neon pink
+st.markdown("### 📸 <span style='color:#ff00ff;'>Live Camera</span>", unsafe_allow_html=True)
 camera_photo = st.camera_input("**Take a picture of code**")
 
 st.subheader("📁 Upload Photos (Batch OK)")
@@ -58,4 +59,4 @@ for uploaded_file in files_to_process:
         if st.button("📋 Copy for Grok", key=timestamp):
             st.code(code_text)
 
-st.info("👆 Tap Share → 'Add to Home Screen' on your phone!")
+st.info("👆 On your phone: Tap Share → 'Add to Home Screen' for full app experience!")
