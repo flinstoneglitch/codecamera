@@ -9,25 +9,19 @@ import easyocr
 
 st.set_page_config(page_title="Code Camera", layout="centered", initial_sidebar_state="collapsed")
 
-# PWA Enhancements
-st.markdown("""
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#0a001f">
-""", unsafe_allow_html=True)
-
-st.markdown("<h1 style='color:#00ffff; text-align:center; font-size:2.5em;'>CODE CAMERA</h1>", unsafe_allow_html=True)
-st.markdown("<h2 style='color:#ff00ff; text-align:center;'>80s NEON FUTURE</h2>", unsafe_allow_html=True)
+st.markdown("<h1 style='color:#00ffff; text-align:center; font-size:2.8em;'>CODE CAMERA</h1>", unsafe_allow_html=True)
 
 reader = easyocr.Reader(['en'])
 
-st.subheader("📸 Live Camera")
-camera_photo = st.camera_input("Take a picture of code")
+st.subheader("📸 <span style='color:#ff00ff;'>Live Camera</span>", unsafe_allow_html=True)
+camera_photo = st.camera_input("**Take a picture of code**")
 
 st.subheader("📁 Upload Photos (Batch OK)")
-uploaded_files = st.file_uploader("Drop multiple photos", type=["jpg","png","jpeg"], accept_multiple_files=True)
+uploaded_files = st.file_uploader("Drop multiple code photos here", type=["jpg", "png", "jpeg"], accept_multiple_files=True)
 
-files_to_process = [camera_photo] if camera_photo else []
+files_to_process = []
+if camera_photo:
+    files_to_process.append(camera_photo)
 if uploaded_files:
     files_to_process.extend(uploaded_files)
 
@@ -64,4 +58,4 @@ for uploaded_file in files_to_process:
         if st.button("📋 Copy for Grok", key=timestamp):
             st.code(code_text)
 
-st.info("👆 Tap Share → 'Add to Home Screen' on your phone for full app experience!")
+st.info("👆 Tap Share → 'Add to Home Screen' on your phone!")
