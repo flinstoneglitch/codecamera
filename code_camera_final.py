@@ -7,9 +7,16 @@ import qrcode
 from datetime import datetime
 import easyocr
 
-st.set_page_config(page_title="Code Camera", layout="centered")
+st.set_page_config(page_title="Code Camera", layout="centered", initial_sidebar_state="collapsed")
 
-st.markdown("<h1 style='color:#00ffff; text-align:center;'>CODE CAMERA</h1>", unsafe_allow_html=True)
+# PWA Enhancements
+st.markdown("""
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#0a001f">
+""", unsafe_allow_html=True)
+
+st.markdown("<h1 style='color:#00ffff; text-align:center; font-size:2.5em;'>CODE CAMERA</h1>", unsafe_allow_html=True)
 st.markdown("<h2 style='color:#ff00ff; text-align:center;'>80s NEON FUTURE</h2>", unsafe_allow_html=True)
 
 reader = easyocr.Reader(['en'])
@@ -18,18 +25,16 @@ st.subheader("📸 Live Camera")
 camera_photo = st.camera_input("Take a picture of code")
 
 st.subheader("📁 Upload Photos (Batch OK)")
-uploaded_files = st.file_uploader("Drop multiple code photos here", type=["jpg", "png", "jpeg"], accept_multiple_files=True)
+uploaded_files = st.file_uploader("Drop multiple photos", type=["jpg","png","jpeg"], accept_multiple_files=True)
 
-files_to_process = []
-if camera_photo:
-    files_to_process.append(camera_photo)
+files_to_process = [camera_photo] if camera_photo else []
 if uploaded_files:
     files_to_process.extend(uploaded_files)
 
 for uploaded_file in files_to_process:
     if uploaded_file is not None:
         image = Image.open(uploaded_file)
-        st.image(image, caption=uploaded_file.name if hasattr(uploaded_file, 'name') else "Camera Photo", use_column_width=True)
+        st.image(image, use_column_width=True)
         
         frame = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -44,8 +49,7 @@ for uploaded_file in files_to_process:
 
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         py_path = f"code_capture_{timestamp}.py"
-        with open(py_path, "w") as f:
-            f.write(code_text)
+        with open(py_path, "w") as f: f.write(code_text)
 
         qr_path = f"code_qr_{timestamp}.png"
         qr = qrcode.QRCode(version=25, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4)
@@ -60,4 +64,4 @@ for uploaded_file in files_to_process:
         if st.button("📋 Copy for Grok", key=timestamp):
             st.code(code_text)
 
-st.info("Add to Home Screen on your phone for a real app experience!")
+st.info("👆 Tap Share → 'Add to Home Screen' on your phone for full app experience!")
